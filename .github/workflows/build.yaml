@@ -33,6 +33,14 @@ on:
         # - 'alpine-3.18'
         # - 'debian-bullseye'
         - 'ubuntu-24.04'
+      platform:
+        description: "Platform"
+        required: true
+        type: choice
+        default: 'linux/aarch64'
+        options:
+        - "linux/aarch64"
+        - "linux/amd64"
 
 jobs:
   matrix:
@@ -126,7 +134,7 @@ jobs:
           VERSION=${{ matrix.ver }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        platforms: "linux/aarch64"
+        platforms: ${{ matrix.platform }}
         push: true
         cache-to: type=local,dest=/tmp/.buildx-cache-new
         cache-from: type=local,src=/tmp/.buildx-cache
