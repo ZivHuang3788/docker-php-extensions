@@ -9,9 +9,9 @@ on:
         description: "PHP Version"
         required: true
         type: choice
-        default: '8.2'
+        default: '8.4'
         options:
-        - '8.2'
+        - '8.4'
       ext:
         description: "Extension name"
         required: true
@@ -30,9 +30,9 @@ on:
         required: true
         type: choice
         options:
-        - 'alpine-3.18'
-        - 'debian-bullseye'
-        - 'ubuntu-20.04'
+        # - 'alpine-3.18'
+        # - 'debian-bullseye'
+        - 'ubuntu-24.04'
 
 jobs:
   matrix:
@@ -124,14 +124,14 @@ jobs:
           OS_VERSION=${{ steps.v.outputs.os_version }}
           PHP_VERSION=${{ matrix.php }}
           VERSION=${{ matrix.ver }}
-        tags: ${{ steps.meta.outputs.tags }},${{ vars.DOCKER_HUB_REPO }}:${{ steps.v.outputs.tag }}
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         platforms: "linux/amd64"
         push: true
         cache-to: type=local,dest=/tmp/.buildx-cache-new
         cache-from: type=local,src=/tmp/.buildx-cache
 
-    - name: Replace cache  # temp fix for https://github.com/docker/build-push-action/issues/252 & https://github.com/moby/buildkit/issues/1896.
+    - name: Replace cache # temp fix for https://github.com/docker/build-push-action/issues/252 & https://github.com/moby/buildkit/issues/1896.
       run: rm -rf /tmp/.buildx-cache && mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   record:
@@ -143,20 +143,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - name: record
-        run: |
-          echo '${{ needs.matrix.outputs.matrix }}' | jq -cr '.include[]' | while read -r item; do
-            mkdir -p "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver')"
-            jq -cn \
-              --arg by evan361425 \
-              --arg at "$(date -u '+%Y-%m-%dT%TZ')" \
-              '{"createdAt":$at,"triggerBy":$by}' \
-              > "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver + "/" + .os').json"
-          done
-          git pull
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: 'chore: record history'
-          file_pattern: "history/*.json"
-      
+    - uses: actions/checkout@v4
+    - name: record
+      run: |
+        echo '${{ needs.matrix.outputs.matrix }}' | jq -cr '.include[]' | while read -r item; do
+          mkdir -p "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver')"
+          jq -cn \
+            --arg by ZivHuang3788 \
+            --arg at "$(date -u '+%Y-%m-%dT%TZ')" \
+            '{"createdAt":$at,"triggerBy":$by}' \
+            > "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver + "/" + .os').json"
+        done
+        git pull
+    - uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: 'chore: record history'
+        file_pattern: "history/*.json"
