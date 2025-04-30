@@ -58,3 +58,4 @@ COPY --from=shuehchoulu/php-extensions:8.2-alpine-3.18-opentelemetry-1.0.3 /open
 RUN mv /opentelemetry.so $(php-config --extension-dir)/opentelemetry.so; \
     docker-php-ext-enable opentelemetry.so
 ```
+ 

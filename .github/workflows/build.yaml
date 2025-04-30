@@ -126,7 +126,7 @@ jobs:
           VERSION=${{ matrix.ver }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        platforms: "linux/amd64"
+        platforms: "linux/aarch64"
         push: true
         cache-to: type=local,dest=/tmp/.buildx-cache-new
         cache-from: type=local,src=/tmp/.buildx-cache
