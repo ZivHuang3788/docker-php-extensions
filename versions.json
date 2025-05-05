@@ -1,7 +1,6 @@
 {
   "php": ["8.3", "8.4"],
   "os": ["ubuntu-24.04", "ubuntu-20.04"],
-  "platform": ["linux/arm64", "linux/amd64"],
   "ext": {
     "grpc": ["1.65.2"],
     "opentelemetry": ["1.0.3"]
