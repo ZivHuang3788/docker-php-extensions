@@ -1,45 +1,9 @@
 {
-  "8.2": {
-    "grpc": {
-      "latest": "1.65.2",
-      "1.65.2": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"],
-      "1.63.0": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"],
-      "1.60.0": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"]
-    },
-    "opentelemetry": {
-      "latest": "1.0.3",
-      "1.0.3": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"]
-    },
-    "mongodb": {
-      "latest": "1.19.3",
-      "1.19.3": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"],
-      "1.17.3": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"],
-      "1.15.3": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"]
-    },
-    "redis": {
-      "latest": "1.19.3",
-      "6.0.2": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"],
-      "5.3.7": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04"]
-    }
-  },
-  "8.3": {
-    "grpc": {
-      "latest": "1.65.2",
-      "1.65.2": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04", "ubuntu-22.04"]
-    },
-    "opentelemetry": {
-      "latest": "1.0.3",
-      "1.0.3": ["alpine-3.18", "debian-bullseye", "ubuntu-20.04", "ubuntu-22.04"]
-    }
-  },
-  "8.4": {
-    "grpc": {
-      "latest": "1.65.2",
-      "1.65.2": ["ubuntu-24.04"]
-    },
-    "opentelemetry": {
-      "latest": "1.0.3",
-      "1.0.3": ["ubuntu-24.04"]
-    }
+  "php": ["8.3", "8.4"],
+  "os": ["ubuntu-24.04", "ubuntu-20.04"],
+  "platform": ["linux/arm64", "linux/amd64"],
+  "ext": {
+    "grpc": ["1.65.2"],
+    "opentelemetry": ["1.0.3"]
   }
 }

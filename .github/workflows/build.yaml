@@ -11,6 +11,8 @@ on:
         type: choice
         default: '8.4'
         options:
+        - '8.2'
+        - '8.3'
         - '8.4'
       ext:
         description: "Extension name"
@@ -30,31 +32,23 @@ on:
         required: true
         type: choice
         options:
-        # - 'alpine-3.18'
+        - 'alpine-3.18'
         # - 'debian-bullseye'
         - 'ubuntu-24.04'
+        - 'ubuntu-20.04'
       platform:
         description: "Platform"
         required: true
         type: choice
-        default: 'linux/arm64'
+        default: 'linux/amd64'
         options:
         - "linux/arm64"
         - "linux/amd64"
-      runson:
-        description: "Runson"
-        required: true
-        type: choice
-        default: 'macos-latest'
-        options:
-        - "ubuntu-latest"
-        - "ubuntu-24.04-arm"
-        - "macos-latest"
 
 jobs:
   matrix:
     name: Prepare Matrix
-    runs-on: ${{ github.event.inputs.runson }}
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.v.outputs.matrix }}
     steps:
@@ -66,12 +60,22 @@ jobs:
         name='${{ github.event_name }}'
         if [ "$name" == "workflow_dispatch" ]; then
           printf '' > missed.jsonl
-          printf '{"php":"%s","ext":"%s","ver":"%s","os":"%s"}\n' \
+
+          if [ "${{ github.event.inputs.platform }}" = "linux/arm64" ]; then
+            runson=ubuntu-24.04-arm
+          elif [ "${{ github.event.inputs.platform }}" = "linux/amd64" ]; then
+            runson="ubuntu-24.04"
+          fi
+
+          printf '{"php":"%s","ext":"%s","ver":"%s","os":"%s","platform":"%s","runson":"%s"}\n' \
             "${{ github.event.inputs.php }}" \
             "${{ github.event.inputs.ext }}" \
             "${{ github.event.inputs.ver }}" \
             "${{ github.event.inputs.os }}" \
+            "${{ github.event.inputs.platform }}" \
+            "$runson" \
             >> missed.jsonl
+
         else
           bash scripts/find-missed.sh
         fi
@@ -80,7 +84,7 @@ jobs:
 
   build:
     name: Prepare Images
-    runs-on: ${{ github.event.inputs.runson }}
+    runs-on: ${{ matrix.runson }}
     needs: matrix
     permissions:
       packages: write
@@ -153,7 +157,7 @@ jobs:
 
   record:
     name: Record history
-    runs-on: ${{ github.event.inputs.runson }}
+    runs-on: ubuntu-latest
     needs:
     - build
     - matrix
