@@ -168,12 +168,12 @@ jobs:
     - name: record
       run: |
         echo '${{ needs.matrix.outputs.matrix }}' | jq -cr '.include[]' | while read -r item; do
-          mkdir -p "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver')"
+          mkdir -p "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver + "/" + .platform')"
           jq -cn \
             --arg by ZivHuang3788 \
             --arg at "$(date -u '+%Y-%m-%dT%TZ')" \
             '{"createdAt":$at,"triggerBy":$by}' \
-            > "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver + "/" + .os').json"
+            > "history/$(echo "$item" | jq -r '.php + "/" + .ext + "/" + .ver + "/" + .platform + "/" + .os').json"
         done
         git pull
     - uses: stefanzweifel/git-auto-commit-action@v5
