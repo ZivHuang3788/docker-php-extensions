@@ -9,11 +9,12 @@ on:
         description: "PHP Version"
         required: true
         type: choice
-        default: '8.4'
+        default: '8.5'
         options:
         - '8.2'
         - '8.3'
         - '8.4'
+        - '8.5'
       ext:
         description: "Extension name"
         required: true
